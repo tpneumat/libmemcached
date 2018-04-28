@@ -38,7 +38,7 @@
 #include <mem_config.h>
 #include <libtest/test.hpp>
 
-#include <libmemcachedutil-1.0/util.h>
+#include <libmemcachedutil-1.2/util.h>
 #include <libmemcached/is.h>
 
 #include <tests/libmemcached-1.0/generate.h>
@@ -118,6 +118,8 @@ test_return_t generate_data(memcached_st *memc)
   return TEST_SUCCESS;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunreachable-code"
 test_return_t generate_data_with_stats(memcached_st *memc)
 {
   test_compare(TEST_SUCCESS, generate_pairs(memc));
@@ -152,6 +154,7 @@ test_return_t generate_data_with_stats(memcached_st *memc)
 
   return TEST_SUCCESS;
 }
+#pragma GCC diagnostic pop
 
 test_return_t generate_buffer_data(memcached_st *memc)
 {

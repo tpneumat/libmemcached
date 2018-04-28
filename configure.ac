@@ -102,6 +102,7 @@ AM_CONDITIONAL([BUILDING_LIBMEMCACHED],[true])
 AM_CONDITIONAL([HAVE_LIBMEMCACHED],[false])
 AM_CONDITIONAL([HAVE_LIBDRIZZLE],[false])
 AC_DEFINE([HAVE_LIBMEMCACHED],[1],[Enables libmemcached Support])
+AC_SUBST([LIBMEMCACHED_CFLAGS])
 
 AM_CONDITIONAL([BUILDING_GEARMAN],[false])
 
@@ -336,7 +337,7 @@ AX_AM_JOBSERVER([yes])
 
 AC_CONFIG_FILES([Makefile
                  docs/source/conf.py
-                 libmemcached-1.0/configure.h
+                 libmemcached-1.2/configure.h
                  support/libmemcached.pc
                  support/libmemcached.spec
                  ])

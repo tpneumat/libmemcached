@@ -690,8 +690,8 @@ static void ms_multi_getset_task_sch(ms_conn_t *c)
  */
 int64_t ms_time_diff(struct timeval *start_time, struct timeval *end_time)
 {
-  int64_t endtime= end_time->tv_sec * 1000000 + end_time->tv_usec;
-  int64_t starttime= start_time->tv_sec * 1000000 + start_time->tv_usec;
+  int64_t endtime= ((int64_t)end_time->tv_sec) * 1000000 + end_time->tv_usec;
+  int64_t starttime= ((int64_t)start_time->tv_sec) * 1000000 + start_time->tv_usec;
 
   assert(endtime >= starttime);
 
@@ -972,6 +972,12 @@ static void ms_update_stat_result(ms_conn_t *c)
 
   gettimeofday(&c->end_time, NULL);
   uint64_t time_diff= (uint64_t)ms_time_diff(&c->start_time, &c->end_time);
+  if ((c->throttle_time.tv_usec != 0)
+      || (c->throttle_time.tv_sec != 0))
+  {
+    uint64_t throttle_time = (uint64_t)ms_time_diff(&c->throttle_time, &c->end_time);
+    time_diff -= throttle_time;
+  }
 
   pthread_mutex_lock(&ms_statistic.stat_mutex);
 

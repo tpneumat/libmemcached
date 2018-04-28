@@ -16,9 +16,12 @@
 #include <cstring>
 #include <getopt.h>
 #include <unistd.h>
+#include <string.h>
+#include <getopt.h>
 
-#include <libmemcached-1.0/memcached.h>
-#include <libmemcachedutil-1.0/util.h>
+#include <libmemcached-1.2/memcached.h>
+#include <libmemcachedutil-1.2/util.h>
+
 #include "client_options.h"
 #include "utilities.h"
 
@@ -92,6 +95,8 @@ int main(int argc, char *argv[])
 }
 
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunreachable-code"
 void options_parse(int argc, char *argv[])
 {
   memcached_programs_help_st help_options[]=
@@ -195,3 +200,4 @@ void options_parse(int argc, char *argv[])
     exit(EXIT_SUCCESS);
   }
 }
+#pragma GCC diagnostic pop

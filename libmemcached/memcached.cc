@@ -58,7 +58,7 @@ static inline bool _memcached_init(Memcached *self)
   self->flags.tcp_nodelay= false;
   self->flags.use_sort_hosts= false;
   self->flags.use_udp= false;
-  self->flags.verify_key= false;
+  self->flags.verify_key= true;
   self->flags.tcp_keepalive= false;
   self->flags.is_aes= false;
   self->flags.is_fetching_version= false;
@@ -152,7 +152,7 @@ static void __memcached_free(Memcached *ptr, bool release_st)
 
   memcached_error_free(*ptr);
 
-  if (LIBMEMCACHED_WITH_SASL_SUPPORT and ptr->sasl.callbacks)
+  if (libmemcached_has_feature(LIBMEMCACHED_FEATURE_HAS_SASL) and ptr->sasl.callbacks)
   {
     memcached_destroy_sasl_auth_data(ptr);
   }
@@ -383,7 +383,7 @@ memcached_st *memcached_clone(memcached_st *clone, const memcached_st *source)
   new_clone->configure.filename= memcached_array_clone(new_clone, source->_namespace);
   new_clone->configure.version= source->configure.version;
 
-  if (LIBMEMCACHED_WITH_SASL_SUPPORT and source->sasl.callbacks)
+  if (libmemcached_has_feature(LIBMEMCACHED_FEATURE_HAS_SASL) and source->sasl.callbacks)
   {
     if (memcached_failed(memcached_clone_sasl(new_clone, source)))
     {

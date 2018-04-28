@@ -1,3 +1,6 @@
+1.1.0 
+* Enable MEMCACHED_BEHAVIOR_VERIFY_KEY by default
+
 1.0.18 Sun Feb  9 01:49:56 PST 2014
 * MEMCACHED_BEHAVIOR_RETRY_TIMEOUT can now be set to zero.
 * Numerous bug fixes.

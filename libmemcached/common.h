@@ -111,9 +111,10 @@
 # include "libmemcached/windows.hpp"
 #endif
 
-#include <libmemcached-1.0/memcached.h>
+#include <libmemcached-1.2/memcached.h>
 #include "libmemcached/watchpoint.h"
 #include "libmemcached/is.h"
+
 typedef struct memcached_st Memcached;
 
 #ifdef HAVE_POLL_H

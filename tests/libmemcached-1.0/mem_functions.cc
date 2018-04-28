@@ -46,9 +46,10 @@
   Test cases
 */
 
-#include <libmemcached-1.0/memcached.h>
+#include <libmemcached-1.2/memcached.h>
 #include "libmemcached/is.h"
 #include "libmemcached/server_instance.h"
+#include "libmemcached/result.h"
 
 #include <libhashkit-1.0/hashkit.h>
 
@@ -76,7 +77,7 @@
 
 using namespace libtest;
 
-#include <libmemcachedutil-1.0/util.h>
+#include <libmemcachedutil-1.2/util.h>
 
 #include "tests/hash_results.h"
 
@@ -695,7 +696,7 @@ test_return_t cas2_test(memcached_st *memc)
   memcached_return_t rc;
   results= memcached_fetch_result(memc, results, &rc);
   test_true(results);
-  test_true(results->item_cas);
+  test_true(results->impl()->item_cas);
   test_compare(MEMCACHED_SUCCESS, rc);
   test_true(memcached_result_cas(results));
 
@@ -1968,7 +1969,7 @@ test_return_t add_host_test(memcached_st *memc)
 
 test_return_t regression_1048945_TEST(memcached_st*)
 {
-  memcached_return status;
+  memcached_return_t status;
 
   memcached_server_st* list= memcached_server_list_append_with_weight(NULL, "a", 11211, 0, &status);
   test_compare(status, MEMCACHED_SUCCESS);
@@ -2703,6 +2704,7 @@ test_return_t user_supplied_bug16(memcached_st *memc)
 /* Check the validity of chinese key*/
 test_return_t user_supplied_bug17(memcached_st *memc)
 {
+  test_compare(memcached_behavior_set(memc, MEMCACHED_BEHAVIOR_VERIFY_KEY, false), MEMCACHED_SUCCESS);
   const char *key= "豆瓣";
   const char *value="我们在炎热抑郁的夏天无法停止豆瓣";
   memcached_return_t rc= memcached_set(memc, key, strlen(key),
@@ -2764,7 +2766,6 @@ test_return_t user_supplied_bug20(memcached_st *memc)
   memcached_result_st *result= memcached_result_create(memc, &result_obj);
   test_true(result);
 
-  memcached_result_create(memc, &result_obj);
   memcached_return_t status;
   result= memcached_fetch_result(memc, &result_obj, &status);
 
@@ -3931,7 +3932,7 @@ test_return_t memcached_get_MEMCACHED_ERRNO(memcached_st *)
 {
   size_t len;
   uint32_t flags;
-  memcached_return rc;
+  memcached_return_t rc;
 
   // Create a handle.
   memcached_st *tl_memc_h= memcached(test_literal_param("--server=localhost:9898 --server=localhost:9899")); // This server should not exist
@@ -3957,7 +3958,7 @@ test_return_t memcached_get_MEMCACHED_NOTFOUND(memcached_st *memc)
 {
   size_t len;
   uint32_t flags;
-  memcached_return rc;
+  memcached_return_t rc;
 
   // See if memcached is reachable.
   char *value= memcached_get(memc,
@@ -3981,7 +3982,7 @@ test_return_t memcached_get_by_key_MEMCACHED_ERRNO(memcached_st *)
 {
   size_t len;
   uint32_t flags;
-  memcached_return rc;
+  memcached_return_t rc;
 
   // Create a handle.
   memcached_st *tl_memc_h= memcached_create(NULL);
@@ -4011,7 +4012,7 @@ test_return_t memcached_get_by_key_MEMCACHED_NOTFOUND(memcached_st *memc)
 {
   size_t len;
   uint32_t flags;
-  memcached_return rc;
+  memcached_return_t rc;
 
   // See if memcached is reachable.
   char *value= memcached_get_by_key(memc, 
@@ -4163,6 +4164,7 @@ test_return_t regression_bug_442914(memcached_st *original_memc)
   test_skip(original_memc->servers[0].type, MEMCACHED_CONNECTION_TCP);
 
   memcached_st* memc= create_single_instance_memcached(original_memc, "--NOREPLY --TCP-NODELAY");
+  test_compare(memcached_behavior_set(memc, MEMCACHED_BEHAVIOR_VERIFY_KEY, false), MEMCACHED_SUCCESS);
 
   for (uint32_t x= 0; x < 250; ++x)
   {
@@ -4432,6 +4434,7 @@ test_return_t test_multiple_get_last_disconnect(memcached_st *)
 
   memcached_st *memc= memcached(server_string, strlen(server_string));
   test_true(memc);
+  test_compare(memcached_behavior_set(memc, MEMCACHED_BEHAVIOR_VERIFY_KEY, false), MEMCACHED_SUCCESS);
 
   // We will just use the error strings as our keys
   uint32_t counter= 100;
@@ -4570,7 +4573,7 @@ test_return_t wrong_failure_counter_two_test(memcached_st *memc)
   /* Check if we still are connected */
   uint32_t flags;
   size_t string_length;
-  memcached_return rc;
+  memcached_return_t rc;
   char *string= memcached_get(memc, key, strlen(key),
                               &string_length, &flags, &rc);
 
@@ -4635,7 +4638,7 @@ test_return_t regression_bug_490486(memcached_st *original_memc)
   char blob[1024]= { 0 };
   for (size_t x= 0; x < keys.size(); ++x)
   {
-    memcached_return rc= memcached_set(memc,
+    memcached_return_t rc= memcached_set(memc,
                                        keys.key_at(x), keys.length_at(x),
                                        blob, sizeof(blob), 0, 0);
     test_true(rc == MEMCACHED_SUCCESS or rc == MEMCACHED_BUFFERED); // MEMCACHED_TIMEOUT <-- hash been observed on OSX
@@ -4645,7 +4648,7 @@ test_return_t regression_bug_490486(memcached_st *original_memc)
 
     /* Try to get all of them with a large multiget */
     size_t counter= 0;
-    memcached_execute_function callbacks[]= { &callback_counter };
+    memcached_execute_fn callbacks[]= { &callback_counter };
     memcached_return_t rc= memcached_mget_execute(memc,
                                                   keys.keys_ptr(), keys.lengths_ptr(), keys.size(),
                                                   callbacks, &counter, 1);
@@ -4833,7 +4836,7 @@ test_return_t regression_bug_490520(memcached_st *original_memc)
     char key[251];
     int key_length= snprintf(key, sizeof(key), "0200%u", x);
 
-    memcached_return rc= memcached_set(memc, key, key_length, blob, sizeof(blob), 0, 0);
+    memcached_return_t rc= memcached_set(memc, key, key_length, blob, sizeof(blob), 0, 0);
     test_true_got(rc == MEMCACHED_SUCCESS or rc == MEMCACHED_BUFFERED, memcached_last_error_message(memc));
   }
 
@@ -4948,7 +4951,7 @@ test_return_t regression_bug_854604(memcached_st *)
   return TEST_SUCCESS;
 }
 
-static void die_message(memcached_st* mc, memcached_return error, const char* what, uint32_t it)
+static void die_message(memcached_st* mc, memcached_return_t error, const char* what, uint32_t it)
 {
   fprintf(stderr, "Iteration #%u: ", it);
 
@@ -4979,7 +4982,7 @@ test_return_t regression_bug_(memcached_st *memc)
   for (uint32_t x= 0; x < TEST_CONSTANT_CREATION; x++)
   {
     memcached_st* mc= memcached_create(NULL);
-    memcached_return rc;
+    memcached_return_t rc;
 
     rc= memcached_behavior_set(mc, MEMCACHED_BEHAVIOR_BINARY_PROTOCOL, 1);
     if (rc != MEMCACHED_SUCCESS)

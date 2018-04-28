@@ -76,12 +76,10 @@ example/memcached_light
 example/t/memcached_light
 libhashkit-1.0/configure.h
 libhashkit/hashkitcon.h
-libmemcached-1.0/configure.h
-libmemcached-1.0/t/c_sasl_test
-libmemcached-1.0/t/c_test
-libmemcached-1.0/t/cc_test
 libmemcached-1.2/configure.h
-libmemcached-2.0/configure.h
+libmemcached-1.2/t/c_sasl_test
+libmemcached-1.2/t/c_test
+libmemcached-1.2/t/cc_test
 libmemcached-?.??/
 libmemcached/configure.h
 libmemcached/csl/parser.cc

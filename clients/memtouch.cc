@@ -19,9 +19,9 @@
 #include <iostream>
 #include <unistd.h>
 
-#include <libmemcached-1.0/memcached.h>
+#include <libmemcached-1.2/memcached.h>
 
-#include "utilities.h"
+#include "clients/utilities.h"
 
 #define PROGRAM_NAME "memtouch"
 #define PROGRAM_DESCRIPTION "Update the expiration value of an already existing value in the server"
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
   memcached_behavior_set(memc, MEMCACHED_BEHAVIOR_BINARY_PROTOCOL,
                          (uint64_t)opt_binary);
 
-  if (opt_username and LIBMEMCACHED_WITH_SASL_SUPPORT == 0)
+  if (opt_username and libmemcached_has_feature(LIBMEMCACHED_FEATURE_HAS_SASL) == false)
   {
     memcached_free(memc);
     std::cerr << "--username was supplied, but binary was not built with SASL support." << std::endl;

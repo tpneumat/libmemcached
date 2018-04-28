@@ -64,7 +64,7 @@ static void auto_response(memcached_instance_st* instance, const bool reply,  me
   else
   {
     assert(memcached_last_error(instance->root) != MEMCACHED_NOTFOUND);
-    *value= instance->root->result.numeric_value;
+    *value= instance->root->result.impl()->numeric_value;
   }
 }
 
