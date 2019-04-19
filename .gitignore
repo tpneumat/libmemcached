@@ -1,7 +1,12 @@
+*.1
+*.3
+*.8
+*.doctree
 *.exe
 *.gz
 *.lo
 *.log
+*.o
 *.orig
 *.output
 *.pop
@@ -66,6 +71,7 @@ configure
 configure.scan
 docs/*.[13]
 docs/*.html
+docs/build
 docs/changes
 docs/conf.py
 docs/doctest/
@@ -166,3 +172,7 @@ tests/testudp
 tests/var/
 tmp_chroot
 unittests/unittests
+
+*.in~
+
+docs/source/conf.py
