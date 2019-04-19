@@ -1,14 +1,15 @@
-*.log
-*.trs
 *.exe
 *.gz
 *.lo
+*.log
 *.orig
 *.output
 *.pop
 *.rej
 *.rpm
+*.sw?
 *.tar
+*.trs
 */*.l[oa]
 */*/*.l[oa]
 */*/.deps
