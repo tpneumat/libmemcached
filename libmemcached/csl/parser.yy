@@ -1,4 +1,4 @@
-/*  vim:expandtab:shiftwidth=2:tabstop=2:smarttab:
+/*  vim: expandtab:shiftwidth=2:tabstop=2:smarttab:
  *
  *  Libmemcached library
  *
@@ -176,8 +176,10 @@ inline void __config_error(Context *context, yyscan_t *scanner, const char *erro
 %token <boolean> CSL_TRUE
 %token <boolean> CSL_FALSE
 
+/*
 %nonassoc ','
 %nonassoc '='
+*/
 
 %token <number> CSL_FLOAT
 %token <number> NUMBER
@@ -458,12 +460,14 @@ behavior_boolean:
 
 
 optional_port:
+          %empty
           { $$= MEMCACHED_DEFAULT_PORT;}
         | PORT
           { };
         ;
 
 optional_weight:
+          %empty
           { $$= 1; }
         | WEIGHT_START
           { }
