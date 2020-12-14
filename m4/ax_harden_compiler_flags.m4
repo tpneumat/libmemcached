@@ -300,7 +300,8 @@ AC_DEFUN([_HARDEN_CXX_COMPILER_FLAGS],
           _APPEND_COMPILE_FLAGS_ERROR([-Wc++11-compat])
 # Disabled due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55837
 #          _APPEND_COMPILE_FLAGS_ERROR([-Weffc++])
-          _APPEND_COMPILE_FLAGS_ERROR([-Wold-style-cast])
+# Disable for Fedora 31
+#          _APPEND_COMPILE_FLAGS_ERROR([-Wold-style-cast])
           _APPEND_COMPILE_FLAGS_ERROR([-Wclobbered])
           _APPEND_COMPILE_FLAGS_ERROR([-Wunused])
           _APPEND_COMPILE_FLAGS_ERROR([-Wunused-result])
