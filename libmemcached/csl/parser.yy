@@ -42,17 +42,17 @@ class Context;
 
 %}
 
-%error-verbose
+%define parse.error verbose
 %debug
 %defines
 %expect 0
 %output "libmemcached/csl/parser.cc"
 %defines "libmemcached/csl/parser.h"
 %lex-param { yyscan_t *scanner }
-%name-prefix="config_"
+%define api.prefix {config_}
 %parse-param { class Context *context }
 %parse-param { yyscan_t *scanner }
-%pure-parser
+%define api.pure
 %require "2.5"
 %start begin
 %verbose

@@ -43,6 +43,10 @@
 
 #include <vector>
 
+#ifndef __INTEL_COMPILER
+#pragma GCC diagnostic ignored "-Wformat-overflow"
+#endif
+
 #ifdef linux
 /* /usr/include/netinet/in.h defines macros from ntohs() to _bswap_nn to
  * optimize the conversion functions, but the prototypes generate warnings
