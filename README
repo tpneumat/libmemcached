@@ -14,7 +14,7 @@ The library is in production in many locations (upwards to 1000+ nodes).
 
 The project has information here: https://libmemcached.org/
 
-Documentation can be found here: https://docs.libmemcached.org/
+Documentation can be found here: http://docs.libmemcached.org/
 
 Want to contribute? If you write more then three good patches, then I will
 just ask you to commit directly to the tree. I am happy to have additional
